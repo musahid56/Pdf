@@ -7,37 +7,27 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff3e3e; /* Red color for downloader */
+            --primary: #ff3e3e; 
             --bg: #0f172a;
             --card: #1e293b;
             --text: #f8fafc;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
-
         .header { text-align: center; margin-bottom: 40px; margin-top: 20px; }
         .header h1 { font-size: 32px; color: var(--primary); margin-bottom: 10px; }
         .header p { color: #94a3b8; font-size: 14px; }
-
         .container { width: 100%; max-width: 500px; background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; }
-
         .input-group { position: relative; margin-bottom: 20px; }
         input { width: 100%; padding: 15px 15px 15px 45px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; outline: none; transition: 0.3s; font-size: 16px; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 62, 62, 0.2); }
         .input-group .material-icons { position: absolute; left: 15px; top: 15px; color: #64748b; }
-
         .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; background: var(--primary); color: white; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-        .btn:active { transform: scale(0.98); }
-
-        /* Result Section */
         #result-box { margin-top: 25px; display: none; text-align: center; border-top: 1px solid #334155; padding-top: 20px; }
         .preview-img { width: 100%; border-radius: 12px; margin-bottom: 15px; border: 1px solid #475569; }
         .download-final { background: #22c55e; margin-top: 10px; }
-
-        /* Loader */
         .loader { display: none; margin: 20px auto; border: 4px solid #334155; border-top: 4px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .footer { margin-top: auto; padding: 20px; font-size: 12px; color: #64748b; }
     </style>
 </head>
@@ -51,7 +41,7 @@
     <div class="container">
         <div class="input-group">
             <span class="material-icons">link</span>
-            <input type="text" id="video-url" placeholder="Paste video link here...">
+            <input type="text" id="video-url" placeholder="Paste Instagram link here...">
         </div>
 
         <button class="btn" onclick="fetchVideo()">
@@ -63,7 +53,7 @@
         <div id="result-box">
             <p style="margin-bottom: 10px; font-weight: bold;">Video Ready!</p>
             <img src="" id="thumb" class="preview-img">
-            <a id="download-link" href="#" target="_blank" style="text-decoration: none;">
+            <a id="download-link" href="#" target="_blank" download="video.mp4" style="text-decoration: none;">
                 <button class="btn download-final">
                     <span class="material-icons">file_download</span> Download Now
                 </button>
@@ -71,34 +61,52 @@
         </div>
     </div>
 
-    <div class="footer">
-        © 2026 Jaano Zara | Made with ❤️ for Ahmedabad
-    </div>
+    <div class="footer"> © 2026 Jaano Zara | Ahmedabad Special </div>
 
     <script>
         async function fetchVideo() {
-            const url = document.getElementById('video-url').value;
+            const urlInput = document.getElementById('video-url').value;
             const loader = document.getElementById('loader');
             const resultBox = document.getElementById('result-box');
+            const thumb = document.getElementById('thumb');
+            const downloadBtn = document.getElementById('download-link');
 
-            if (!url) return alert("Bhai, link toh daal de!");
+            if (!urlInput) { alert("Bhai, link toh daal de!"); return; }
 
-            // Show Loader
             loader.style.display = 'block';
             resultBox.style.display = 'none';
 
-            // --- Yahan API ka Magic Shuru Hoga ---
-            // Abhi ke liye hum sirf "Simulation" kar rahe hain
-            setTimeout(() => {
+            // RapidAPI Settings
+            const options = {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': '361bf7a158msh4af61a5c7bbb812p1b29e7jsn01e807ebd543',
+                    'x-rapidapi-host': 'instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com'
+                }
+            };
+
+            try {
+                // API URL with user input
+                const apiURL = `https://instagram-downloader-download-instagram-stories-videos4.p.rapidapi.com/convert?url=${encodeURIComponent(urlInput)}`;
+                
+                const response = await fetch(apiURL, options);
+                const data = await response.json();
+
                 loader.style.display = 'none';
-                resultBox.style.display = 'block';
-                
-                // Demo Data (Asli API aane par ye badal jayega)
-                document.getElementById('thumb').src = "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop";
-                document.getElementById('download-link').href = url; // Link wahi rakha hai testing ke liye
-                
-                alert("Bhai, Design mast hai na? Asli Download link tab chalega jab hum API connect karenge.");
-            }, 2000);
+
+                // API response check (URL key holds the video link)
+                if (data && data.url) {
+                    resultBox.style.display = 'block';
+                    thumb.src = data.thumbnail || "https://via.placeholder.com/300x150?text=Video+Ready";
+                    downloadBtn.href = data.url; 
+                } else {
+                    alert("O Teri! Video nahi mili. Link check kar ya shayad ID private hai.");
+                }
+            } catch (error) {
+                loader.style.display = 'none';
+                console.error(error);
+                alert("Server busy hai, thodi der baad try kar!");
+            }
         }
     </script>
 </body>
