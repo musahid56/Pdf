@@ -3,119 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaano Zara - 100% Free HD Videos</title>
+    <title>Jaano Zara - HD Videos</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root { --primary: #3b82f6; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
-        
-        .header { text-align: center; margin-bottom: 25px; }
-        .header h1 { color: var(--primary); font-size: 28px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .container { width: 100%; max-width: 450px; background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .container { width: 100%; max-width: 450px; background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; }
         .search-area { display: flex; gap: 8px; margin-bottom: 20px; }
-        input { flex: 1; padding: 14px; background: #0f172a; border: 2px solid #334155; border-radius: 12px; color: white; outline: none; font-size: 16px; }
-        input:focus { border-color: var(--primary); }
-        
-        .search-btn { background: var(--primary); border: none; color: white; padding: 0 20px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; }
-
-        #results { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 10px; }
-        .v-card { background: #0f172a; border-radius: 15px; overflow: hidden; border: 1px solid #334155; padding-bottom: 10px; }
-        video { width: 100%; display: block; background: #000; }
-        
-        .download-box { padding: 12px; text-align: center; }
-        .dl-link { 
-            background: #22c55e; 
-            color: white; 
-            text-decoration: none; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px; 
-            font-weight: bold;
-            font-size: 14px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .loader { display: none; margin: 20px auto; border: 4px solid #334155; border-top: 4px solid var(--primary); border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; }
+        input { flex: 1; padding: 12px; background: #0f172a; border: 2px solid #334155; border-radius: 10px; color: white; outline: none; }
+        .btn { background: var(--primary); border: none; color: white; padding: 10px 15px; border-radius: 10px; cursor: pointer; }
+        #results { margin-top: 15px; }
+        .v-card { background: #0f172a; border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 1px solid #334155; }
+        video { width: 100%; display: block; }
+        .dl-link { background: #22c55e; color: white; text-decoration: none; padding: 10px; display: block; text-align: center; font-weight: bold; }
+        .loader { display: none; margin: 10px auto; border: 3px solid #334155; border-top: 3px solid var(--primary); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>HD <span style="color:white">Videos</span></h1>
-        <p style="color:#64748b; font-size: 13px;">Official 100% Working Video Search</p>
+        <h1 style="color:var(--primary)">HD VIDEOS</h1>
+        <p style="color:#64748b; font-size:12px;">Search Anything (Nature, Love, Cars)</p>
     </div>
 
     <div class="container">
         <div class="search-area">
-            <input type="text" id="userInput" placeholder="Search (Nature, Car, Love...)">
-            <button class="search-btn" onclick="getVideos()">
+            <input type="text" id="query" placeholder="Type here...">
+            <button class="btn" onclick="getVideos()">
                 <span class="material-icons">search</span>
             </button>
         </div>
-
         <div class="loader" id="loader"></div>
         <div id="results"></div>
     </div>
 
     <script>
         async function getVideos() {
-            const query = document.getElementById('userInput').value;
+            const query = document.getElementById('query').value;
             const loader = document.getElementById('loader');
             const results = document.getElementById('results');
 
-            if (!query) return alert("Bhai, kuch likho toh sahi!");
+            if (!query) { alert("Pehle kuch likho toh sahi!"); return; }
 
             loader.style.display = 'block';
             results.innerHTML = '';
 
             try {
-                // Official Pixabay API Key (Working 100%)
-                const apiKey = '44109726-21a47385be3d002e1b12b55f1'; 
+                // Pixabay API - Direct & 100% Working
+                const apiKey = '44109726-21a47385be3d002e1b12b55f1';
                 const url = `https://pixabay.com/api/videos/?key=${apiKey}&q=${encodeURIComponent(query)}&per_page=5`;
-
+                
                 const response = await fetch(url);
                 const data = await response.json();
-
+                
                 loader.style.display = 'none';
 
-                if (data.hits.length > 0) {
-                    data.hits.forEach(video => {
-                        // Sabse high quality wala MP4 link nikal rahe hain
-                        const videoUrl = video.videos.medium.url; 
-                        
+                if (data.hits && data.hits.length > 0) {
+                    data.hits.forEach(v => {
+                        const videoUrl = v.videos.medium.url;
                         results.innerHTML += `
                             <div class="v-card">
-                                <video controls preload="none" poster="${video.userImageURL || ''}">
+                                <video controls preload="none">
                                     <source src="${videoUrl}" type="video/mp4">
                                 </video>
-                                <div class="download-box">
-                                    <a href="${videoUrl}" target="_blank" class="dl-link">
-                                        <span class="material-icons">download</span> Download Video
-                                    </a>
-                                </div>
-                            </div>
-                        `;
+                                <a href="${videoUrl}" target="_blank" class="dl-link">DOWNLOAD VIDEO</a>
+                            </div>`;
                     });
                 } else {
-                    alert("Aisi koi video nahi mili bhai!");
+                    alert("No videos found!");
                 }
             } catch (err) {
                 loader.style.display = 'none';
-                alert("Network Error! GitHub par update karke check karo.");
-            }
-        }
-    </script>
-</body>
-</html>
-                console.error(error);
-                alert("Server busy hai, thodi der baad try kar!");
+                alert("Error! Check internet.");
             }
         }
     </script>
