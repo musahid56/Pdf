@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "title": "Beautiful Nature",
+    "category": "Nature",
+    "video_url": "https://v.pixabay.com/video/2023/10/24/186355-877918809_tiny.mp4"
+  },
+  {
+    "id": 2,
+    "title": "Fast City Cars",
+    "category": "Cars",
+    "video_url": "https://v.pixabay.com/video/2020/09/21/50239-461327150_tiny.mp4"
+  }
+]
+
