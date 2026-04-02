@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaano Zara - My API</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .video-card { background: #1e293b; border-radius: 15px; margin-bottom: 20px; overflow: hidden; border: 1px solid #334155; }
+        video { width: 100%; display: block; }
+        .btn { background: #22c55e; color: white; text-decoration: none; padding: 10px; display: block; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>MY PERSONAL API VIDEOS</h1>
+    <div id="video-list"></div>
+
+    <script>
+        async function loadData() {
+            const list = document.getElementById('video-list');
+            try {
+                // YE LINK DH dhyan se dekhna: musahid56.github.io/Pdf/mydata.json
+                const response = await fetch('mydata.json'); 
+                const data = await response.json();
+
+                data.forEach(item => {
+                    list.innerHTML += `
+                        <div class="video-card">
+                            <h3 style="padding:10px">${item.title}</h3>
+                            <video controls><source src="${item.video_url}" type="video/mp4"></video>
+                            <a href="${item.video_url}" download class="btn">DOWNLOAD</a>
+                        </div>`;
+                });
+            } catch (e) { alert("Data nahi mila!"); }
+        }
+        window.onload = loadData;
+    </script>
+</body>
+</html>
+
